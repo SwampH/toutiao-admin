@@ -1,23 +1,23 @@
 <template>
     <div class="login-container">
-      <el-form class="login-form" ref="form" :model="user">
+      <el-form class="login-form" ref="loginForm" :model="user" :rules="loginRules" >
         <el-form-item class="index-logo">
           <img src="./logo_index.png" alt="">
         </el-form-item>
-        <el-form-item>
+        <el-form-item  prop="mobile">
           <el-input
            placeholder="请输入手机号"
            v-model="user.mobile">
           </el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item  prop="code">
           <el-input
            v-model="user.code"
            placeholder="请输入验证码">
           </el-input>
         </el-form-item>
-        <el-form-item>
-          <el-checkbox v-model="checked">
+        <el-form-item prop="checked">
+          <el-checkbox v-model="user.checked">
            我已阅读并同意用户协议和隐私条款
           </el-checkbox>
         </el-form-item>
@@ -32,19 +32,42 @@
     </div>
 </template>
 <script>
-import request from '@/utils/request.js'
+import { loginUser } from '@/api/user.js'
 
 export default {
   name: 'LoginIndex',
   data () {
     return {
       user: {
-        mobile: '13911111111', // 手机号
-        code: '246810' // 验证码
+        mobile: '', // 手机号
+        code: '', // 验证码
+        checked: false
       },
-      checked: false,
       loginLoading: false,
-      loginBtn: '登录'
+      loginBtn: '登录',
+      loginRules: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'change' },
+          { pattern: /^1[3|5|7|9|8|6]\d{9}$/, message: '输入正确的格式', trigger: 'change' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'change' },
+          { pattern: /^\d{6}$/, message: '输入正确的格式', trigger: 'change' }
+        ],
+        checked: [
+          {
+            validator: (rule, value, callback) => {
+              if (value) {
+                console.log(this.checked)
+                callback()
+              } else {
+                callback(new Error('请勾选用户同意协议'))
+              }
+            },
+            trigger: 'change'
+          }
+        ]
+      }
     }
   },
   activated () {},
@@ -54,14 +77,18 @@ export default {
   methods: {
     // 登录请求
     onLogin () {
+      this.$refs.loginForm.validate((valid) => {
+        if (!valid) {
+          return false
+        }
+        this.login()
+      })
+    },
+    login () {
       const user = this.user
       this.loginLoading = true
       this.loginBtn = '登录中'
-      request({
-        url: '/mp/v1_0/authorizations',
-        method: 'POST',
-        data: user
-      }).then(res => {
+      loginUser(user).then(res => {
         // 登录成功
         this.$message({
           message: '登录成功',
@@ -116,5 +143,4 @@ export default {
     }
   }
 }
-
 </style>
