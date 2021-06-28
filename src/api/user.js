@@ -7,3 +7,13 @@ export const loginUser = data => {
     data
   })
 }
+export const getUserProfile = data => {
+  const user = JSON.parse(window.localStorage.getItem('user'))
+  return request({
+    url: '/mp/v1_0/user/profile',
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${user.token}`
+    }
+  })
+}

@@ -35,13 +35,13 @@
 import { loginUser } from '@/api/user.js'
 
 export default {
-  name: 'LoginIndex',
+  name: 'Login',
   data () {
     return {
       user: {
-        mobile: '', // 手机号
-        code: '', // 验证码
-        checked: false
+        mobile: '13911111111', // 手机号
+        code: '246810', // 验证码
+        checked: true
       },
       loginLoading: false,
       loginBtn: '登录',
@@ -58,7 +58,7 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (value) {
-                console.log(this.checked)
+                // console.log(this.checked)
                 callback()
               } else {
                 callback(new Error('请勾选用户同意协议'))
@@ -88,18 +88,24 @@ export default {
       const user = this.user
       this.loginLoading = true
       this.loginBtn = '登录中'
-      loginUser(user).then(res => {
+      loginUser(user).then((res) => {
+        window.localStorage.setItem('user', JSON.stringify(res.data.data))
+
         // 登录成功
         this.$message({
           message: '登录成功',
           type: 'success',
           center: true
         })
+
+        // 登录成功就跳转到layout
+        this.$router.push('/')
         this.loginLoading = false
         this.loginBtn = '登录'
         console.log(res)
-      }).catch(err => {
-        console.log('登录失败', err)
+        // console.log(res)
+      }).catch((err) => {
+        console.log(err)
         // 登录失败
         this.$message({
           message: '登录失败，用户名或密码错误',
