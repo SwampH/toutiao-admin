@@ -64,13 +64,14 @@ export default {
 </script>
 <style lang="less" scoped>
 .layout-aside-container {
-  height: 100%;
+  // height: 100%;
   background-color: #001E34;
   .logo-admin{
     height: 6%;
     padding:20px 20px 0 30px;
     img {
-      width: 40%;
+      width: 60px;
+      height: 43px;
     }
   }
   .el-menu-aside {

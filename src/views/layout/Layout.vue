@@ -65,7 +65,8 @@ export default {
   bottom: 0;
 }
 .aside {
-  background-color: #D3DCE6;
+  background-color: #001E34;
+  overflow: hidden;
 }
 .header {
   background-color: #fff;
