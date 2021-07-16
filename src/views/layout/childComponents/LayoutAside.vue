@@ -1,8 +1,9 @@
 <template>
   <div class="layout-aside-container">
-    <div class="logo-admin">
+    <div class="logo-admin" :collapse="isCollapse" v-show="!isCollapse">
         <img src="../logo_admin.png" alt="">
     </div>
+    <!-- 是否启动折叠动画 :collapse-transition="false"-->
     <el-menu
         default-active="/"
         class="el-menu-aside"
@@ -10,6 +11,8 @@
         text-color="#fff"
         active-text-color="#D9CC97"
         router
+        :collapse="isCollapse"
+        :collapse-transition="false"
         >
         <el-menu-item index="/">
           <i class="iconfont icon-Homehomepagemenu"></i>
@@ -45,6 +48,7 @@
 <script>
 export default {
   name: 'LayoutAside',
+  props: ['is-collapse'],
   data () {
     return {}
   },
@@ -65,17 +69,20 @@ export default {
 <style lang="less" scoped>
 .layout-aside-container {
   // height: 100%;
-  background-color: #001E34;
   .logo-admin{
+    background-color: #001E34;
     height: 6%;
-    padding:20px 20px 0 30px;
+    padding:20px 80px 0 20px;
+    display: flex;
+    justify-content: center;
     img {
       width: 60px;
       height: 43px;
     }
   }
   .el-menu-aside {
-    height: 80%;
+    // background-color: #001E34;
+    height: 100%;
     .iconfont {
       padding-right: 10px;
       padding-left: 5px;

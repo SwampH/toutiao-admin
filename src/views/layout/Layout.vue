@@ -1,12 +1,15 @@
 <template>
     <el-container class="layout-container">
-      <el-aside width="200px" class="aside">
-        <layout-aside/>
+      <el-aside width="auto" class="aside">
+        <layout-aside :is-collapse="isCollapse"/>
       </el-aside>
       <el-container>
         <el-header class="header">
           <div class="company">
-            <div class="el-icon-s-fold"></div>
+            <i :class="{
+                'el-icon-s-fold': !isCollapse,
+                'el-icon-s-unfold':isCollapse
+              }" @click="toggleFold" id="iconFold"></i>
             <span>头条有限公司</span>
           </div>
           <el-dropdown>
@@ -33,7 +36,8 @@ export default {
   name: 'Layout',
   data () {
     return {
-      user: {}
+      user: {},
+      isCollapse: false
     }
   },
   methods: {
@@ -42,6 +46,9 @@ export default {
         // console.log(res)
         this.user = res.data.data
       })
+    },
+    toggleFold () {
+      this.isCollapse = !this.isCollapse
     }
   },
   components: {
@@ -66,7 +73,6 @@ export default {
 }
 .aside {
   background-color: #001E34;
-  overflow: hidden;
 }
 .header {
   background-color: #fff;
@@ -95,5 +101,8 @@ export default {
   span {
     padding-left: 10px;
   }
+}
+#iconFold:hover {
+ cursor: pointer;
 }
 </style>
